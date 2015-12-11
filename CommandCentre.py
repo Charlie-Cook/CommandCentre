@@ -7,7 +7,7 @@ stream_url = "wss://stream.pushbullet.com/websocket/" + token
 
 
 def received_message(ws, message):
-    parsed_json = json.load(message)
+    parsed_json = json.loads(message)
     if parsed_json['subtype'] == 'push':
         print("Received a push")
 
