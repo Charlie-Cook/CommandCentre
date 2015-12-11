@@ -1,4 +1,5 @@
 import json
+import time
 import requests
 import websocket
 from sys import exit
@@ -12,6 +13,8 @@ run = True
 
 pushbullet_stream = websocket.create_connection(stream_url)
 
+print("CommandCentre - created by Charlie Cook")
+
 while run is True:
     result = pushbullet_stream.recv()
     try:
@@ -23,6 +26,7 @@ while run is True:
                 if push_json['pushes'][0]['type'] == 'note':
                     print(push_json['pushes'][0]['body'])
                     if push_json['pushes'][0]['body'] == 'Exit':
-                        exit
+                        exit()
     except KeyError:
         pass
+    time.sleep(0.5)
