@@ -2,8 +2,7 @@ import json
 import time
 import requests
 import websocket
-from sys import exit
-
+import subprocess
 from APIToken import token
 
 stream_url = "wss://stream.pushbullet.com/websocket/" + token
@@ -15,6 +14,18 @@ pushbullet_stream = websocket.create_connection(stream_url)
 
 print("CommandCentre - created by Charlie Cook")
 
+
+def run_command(passed_cmd):
+    if passed_cmd == "Vagrant up":
+        p = subprocess.Popen(['powershell.exe',
+                              'C:\\Users\\Digital4357\\Documents\\PowershellScripts\\VagrantCommands -command up'])
+        p.communicate()
+    elif passed_cmd == "Vagrant halt":
+        p = subprocess.Popen(['powershell.exe',
+                              'C:\\Users\\Digital4357\\Documents\\PowershellScripts\\VagrantCommands -command halt'])
+        p.communicate()
+
+
 while run is True:
     result = pushbullet_stream.recv()
     try:
@@ -24,9 +35,12 @@ while run is True:
             if latest_push.status_code == 200:
                 push_json = json.loads(latest_push.text)
                 if push_json['pushes'][0]['type'] == 'note':
-                    print(push_json['pushes'][0]['body'])
-                    if push_json['pushes'][0]['body'] == 'Exit':
+                    received_command = push_json['pushes'][0]['body']
+                    print(received_command)
+                    if received_command == 'Exit':
                         exit()
+                    else:
+                        run_command(received_command)
     except KeyError:
         pass
     time.sleep(0.5)
