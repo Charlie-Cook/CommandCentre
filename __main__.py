@@ -13,7 +13,7 @@ def welcome_message():
 
 
 def exit_system():
-    print('CommandCentre - Shutting down\n')
+    print('\nCommandCentre - Shutting down\n')
     exit()
 
 
