@@ -20,7 +20,7 @@ def exit_system():
 hooks = {}
 plugin_names = []
 
-for file in glob.glob('plugins\*.py'):
+for file in glob.glob('plugins/*.py'):
     file_no_extension = (os.path.basename(os.path.splitext(file)[0]))
     if file_no_extension == '__init__':
         break
