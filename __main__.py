@@ -1,5 +1,4 @@
 import os
-import sys
 import glob
 import json
 import time
@@ -11,6 +10,11 @@ from config import stream_url, push_url, header
 def welcome_message():
     print('CommandCentre - created by Charlie Cook\n')
     print('Load plugins by placing suitable .py files in the plugins folder.\n\n')
+
+
+def exit_system():
+    print('CommandCentre - Shutting down\n')
+    exit()
 
 
 hooks = {}
@@ -27,12 +31,10 @@ for plugin in plugin_names:
     exec('from plugins import {!s}'.format(plugin))
     exec('hooks[{!s}.hook] = {!r}'.format(plugin, plugin))
 
-print(hooks)
+run = True
+welcome_message()
 
-run = False
-# welcome_message()
-
-# pushbullet_stream = websocket.create_connection(stream_url)
+pushbullet_stream = websocket.create_connection(stream_url)
 
 while run is True:
     result = pushbullet_stream.recv()
@@ -47,9 +49,9 @@ while run is True:
                     check_hook = received_command.split(' ', 1)[0]
                     command = received_command.split(' ', 1)[1:]
                     if check_hook in hooks.keys():
-                        exec('{!s}.run_command({!r})'.format(command))
+                        exec('{!s}.run_command({!r})'.format(hooks[check_hook], command))
                     elif check_hook == 'Exit':
-                        exit()
+                        exit_system()
     except KeyError:
         pass
     time.sleep(0.5)

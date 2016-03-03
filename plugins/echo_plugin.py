@@ -1,4 +1,4 @@
-hook = 'Another'
+hook = 'Echo'
 
 
 def run_command(command):
