@@ -1,9 +1,14 @@
 # CommandCentre
-A Python script which will feature functionality for interacting with my dev environment via mobile.
+An extendable Python script which will feature functionality for interacting with my dev environment via mobile.
+This script features a custom plugin system for extending functionality. Look at the existing plugins for help on how to create these.
+
 Author: Charlie Cook
 
 Current commands are:
 
+- Exit
+- Echo (Text goes here)
+- Sound alert
 - Vagrant up
 - Vagrant halt
 
