@@ -25,7 +25,9 @@ for file in glob.glob('plugins\*.py'):
 
 for plugin in plugin_names:
     exec('from plugins import {!s}'.format(plugin))
-    exec('hooks["{!s}"] = {!s}.hook'.format(plugin, plugin))
+    exec('hooks[{!s}.hook] = {!r}'.format(plugin, plugin))
+
+print(hooks)
 
 run = False
 # welcome_message()
@@ -42,11 +44,12 @@ while run is True:
                 push_json = json.loads(latest_push.text)
                 if push_json['pushes'][0]['type'] == 'note':
                     received_command = push_json['pushes'][0]['body']
-                    print(received_command)
-                    if received_command == 'Exit':
+                    check_hook = received_command.split(' ', 1)[0]
+                    command = received_command.split(' ', 1)[1:]
+                    if check_hook in hooks.keys():
+                        exec('{!s}.run_command({!r})'.format(command))
+                    elif check_hook == 'Exit':
                         exit()
-                    else:
-                        run_command(received_command)
     except KeyError:
         pass
     time.sleep(0.5)
