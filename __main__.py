@@ -5,13 +5,15 @@ import json
 import time
 import requests
 import websocket
-from config import token, stream_url, push_url, header
+from config import stream_url, push_url, header
 
 
 def welcome_message():
     print('CommandCentre - created by Charlie Cook\n')
     print('Load plugins by placing suitable .py files in the plugins folder.\n\n')
 
+
+hooks = {}
 plugin_names = []
 
 for file in glob.glob('plugins\*.py'):
@@ -21,7 +23,9 @@ for file in glob.glob('plugins\*.py'):
     else:
         plugin_names.append(file_no_extension)
 
-print(plugin_names)
+for plugin in plugin_names:
+    exec('from plugins import {!s}'.format(plugin))
+    exec('hooks["{!s}"] = {!s}.hook'.format(plugin, plugin))
 
 run = False
 # welcome_message()
