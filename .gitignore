@@ -60,4 +60,4 @@ target/
 .idea/
 
 # Pushbullet API Token
-APIToken.py
+APIKey.py
